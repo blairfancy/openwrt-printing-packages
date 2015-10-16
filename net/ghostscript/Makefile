@@ -17,6 +17,8 @@ PKG_MD5SUM:=153ddb0622cb155d2f600146f1e28d84
 PKG_BUILD_DEPENDS:=ghostscript/host
 PKG_INSTALL:=1
 
+HOST_PATCH_DIR := ./patches-host
+
 # During its build Ghostscript needs to run some binaries of its
 # own. Thus the 'host-build'
 include $(INCLUDE_DIR)/host-build.mk
@@ -73,8 +75,8 @@ define Host/Configure
 endef
 
 # Patches cannot be applied to the host build
-define Host/Patch
-endef
+#define Host/Patch
+#endef
 
 # No need to install or patch HOST
 define Host/Install
