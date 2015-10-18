@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cups
 PKG_VERSION:=1.6.3
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-source.tar.bz2
 PKG_SOURCE_URL:= \
@@ -32,7 +32,7 @@ define Package/cups
 $(call Package/cups/Default)
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libcups +libcupsmime +libcupscgi +libcupsppdc +libusb-1.0 +libavahi-dbus-support +libavahi-client +libdbus +openslp +avahi-autoipd +avahi-dnsconfd
+  DEPENDS:=+libcups +libcupsmime +libcupsimage +libcupscgi +libcupsppdc +libusb-1.0 +libavahi-dbus-support +libavahi-client +libdbus +openslp +avahi-autoipd +avahi-dnsconfd
   TITLE:=Common UNIX Printing System (daemon)
 endef
 
@@ -439,7 +439,7 @@ define Package/cups/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/cups/driver $(1)/usr/lib/cups
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/cups/monitor $(1)/usr/lib/cups
 	$(INSTALL_DIR) $(1)/usr/lib/cups/filter
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/cups/filter/{commandtops,pstops} \
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/cups/filter/{commandtops,pstops,rastertopwg} \
 		$(PKG_INSTALL_DIR)/usr/lib/cups/filter/gziptoany \
 		$(1)/usr/lib/cups/filter
 	$(INSTALL_DIR) $(1)/usr/share/cups
