@@ -1,0 +1,157 @@
+--- a/config-scripts/cups-directories.m4
++++ b/config-scripts/cups-directories.m4
+@@ -104,7 +104,7 @@ if test "$libdir" = "\${exec_prefix}/lib
+ 	case "$uname" in
+ 		Linux*)
+ 			if test -d /usr/lib64 -a ! -d /usr/lib64/fakeroot; then
+-				libdir="$exec_prefix/lib64"
++				libdir="$exec_prefix/lib"
+ 			fi
+ 			;;
+ 	esac
+--- a/configure
++++ b/configure
+@@ -2501,7 +2501,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+ 
+ 
+ 
+-uname=`uname`
++uname=${UNAME:-`uname`}
+ uversion=`uname -r | sed -e '1,$s/^[^0-9]*\([0-9]*\)\.\([0-9]*\).*/\1\2/'`
+ uarch=`uname -m`
+ 
+@@ -6023,7 +6023,7 @@ if test "$libdir" = "\${exec_prefix}/lib
+ 	case "$uname" in
+ 		Linux*)
+ 			if test -d /usr/lib64 -a ! -d /usr/lib64/fakeroot; then
+-				libdir="$exec_prefix/lib64"
++				libdir="$exec_prefix/lib"
+ 			fi
+ 			;;
+ 	esac
+--- a/cups-config.in
++++ b/cups-config.in
+@@ -50,7 +50,7 @@ else
+ 	CFLAGS="$CFLAGS -I$includedir"
+     fi
+ 
+-    if test $libdir != /usr/lib -a $libdir != /usr/lib32 -a $libdir != /usr/lib64; then
++    if test $libdir != /usr/lib -a $libdir != /usr/lib -a $libdir != /usr/lib; then
+ 	LDFLAGS="$LDFLAGS -L$libdir"
+     fi
+ fi
+--- a/man/Makefile
++++ b/man/Makefile
+@@ -206,6 +206,7 @@ html:	$(MAN1) $(MAN5) $(MAN7) $(MAN8) ma
+ 	echo Converting man pages to HTML...
+ 	for file in $(MAN1); do \
+ 		echo "    $$file..."; \
++		echo "./mantohtml `basename $$file .$(MAN1EXT)`.man >../doc/help/man-`basename $$file .$(MAN1EXT)`.html"; \
+ 		./mantohtml `basename $$file .$(MAN1EXT)`.man >../doc/help/man-`basename $$file .$(MAN1EXT)`.html; \
+ 	done
+ 	for file in $(MAN5); do \
+@@ -221,11 +222,12 @@ html:	$(MAN1) $(MAN5) $(MAN7) $(MAN8) ma
+ 		./mantohtml `basename $$file .$(MAN8EXT)`.man >../doc/help/man-`basename $$file .$(MAN8EXT)`.html; \
+ 	done
+ 
+-mantohtml:	mantohtml.o ../cups/$(LIBCUPSSTATIC)
+-	$(CC) $(ARCHFLAGS) $(LDFLAGS) -o $@ mantohtml.o \
+-		../cups/$(LIBCUPSSTATIC) $(LIBGSSAPI) $(SSLLIBS) \
+-		$(DNSSDLIBS) $(COMMONLIBS) $(LIBZ)
+-
++#mantohtml:	mantohtml.o ../cups/$(LIBCUPSSTATIC)
++	#$(CC) $(ARCHFLAGS) $(LDFLAGS) -o $@ mantohtml.o \
++	#	../cups/$(LIBCUPSSTATIC) $(LIBGSSAPI) $(SSLLIBS) \
++	#	$(DNSSDLIBS) $(COMMONLIBS) $(LIBZ)
++mantohtml:	mantohtml.c ../cups/$(LIBCUPSSTATIC)
++	c++ -I../ -o $@ mantohtml.c
+ 
+ #
+ # End of "$Id: Makefile 12814 2015-07-30 15:03:33Z msweet $".
+--- a/ppdc/Makefile
++++ b/ppdc/Makefile
+@@ -243,7 +243,7 @@ genstrings:		genstrings.o libcupsppdc.a
+ 		libcupsppdc.a ../cups/$(LIBCUPSSTATIC) $(LIBGSSAPI) $(SSLLIBS) \
+ 		$(DNSSDLIBS) $(COMMONLIBS) $(LIBZ)
+ 	echo Generating localization strings...
+-	./genstrings >sample.c
++	# ./genstrings >sample.c
+ 
+ 
+ #
+@@ -260,9 +260,9 @@ ppdc-static:		ppdc.o libcupsppdc.a ../cu
+ 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o ppdc-static ppdc.o libcupsppdc.a \
+ 		../cups/$(LIBCUPSSTATIC) $(LIBGSSAPI) $(SSLLIBS) $(DNSSDLIBS) \
+ 		$(COMMONLIBS) $(LIBZ)
+-	echo Testing PPD compiler...
+-	./ppdc-static -l en,fr -I ../data foo.drv
+-	./ppdc-static -l en,fr -z -I ../data foo.drv
++	#echo Testing PPD compiler...
++	#./ppdc-static -l en,fr -I ../data foo.drv
++	#./ppdc-static -l en,fr -z -I ../data foo.drv
+ 
+ 
+ #
+@@ -288,17 +288,17 @@ ppdi-static:		ppdc-static ppdi.o libcups
+ 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o ppdi-static ppdi.o libcupsppdc.a \
+ 		../cups/$(LIBCUPSSTATIC) $(LIBGSSAPI) $(SSLLIBS) $(DNSSDLIBS) \
+ 		$(COMMONLIBS) $(LIBZ)
+-	echo Testing PPD importer...
+-	$(RM) -r ppd ppd2 sample-import.drv
+-	./ppdc-static -l en -I ../data sample.drv
+-	./ppdi-static -I ../data -o sample-import.drv ppd/*
+-	./ppdc-static -l en -I ../data -d ppd2 sample-import.drv
+-	if diff -r ppd ppd2 >/dev/null; then \
+-		echo PPD import OK; \
+-	else \
+-		echo PPD import FAILED; \
+-		exit 1; \
+-	fi
++	#echo Testing PPD importer...
++	#$(RM) -r ppd ppd2 sample-import.drv
++	#./ppdc-static -l en -I ../data sample.drv
++	#./ppdi-static -I ../data -o sample-import.drv ppd/*
++	#./ppdc-static -l en -I ../data -d ppd2 sample-import.drv
++	#if diff -r ppd ppd2 >/dev/null; then \
++	#	echo PPD import OK; \
++	#else \
++	#	echo PPD import FAILED; \
++	#	exit 1; \
++	#fi
+ 
+ 
+ #
+--- a/man/mantohtml.c
++++ b/man/mantohtml.c
+@@ -40,6 +40,31 @@ static void	html_fputs(const char *s, in
+ static void	html_putc(int ch, FILE *fp);
+ static void	strmove(char *d, const char *s);
+ 
++size_t strlcpy(char *dst, const char *src, size_t siz)
++{
++	register char *d = dst;
++	register const char *s = src;
++	register size_t n = siz;
++
++	/* Copy as many bytes as will fit */
++	if (n != 0 && --n != 0) {
++		do {
++			if ((*d++ = *s++) == 0)
++				break;
++		} while (--n != 0);
++	}
++
++	/* Not enough room in dst, add NUL and traverse rest of src */
++	if (n == 0) {
++		if (siz != 0)
++			*d = '\0';		/* NUL-terminate dst */
++		while (*s++)
++			;
++	}
++
++	return(s - src - 1);	/* count does not include NUL */
++}
++
+ 
+ /*
+  * 'main()' - Convert a man page to HTML.

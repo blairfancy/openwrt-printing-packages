@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cups
-PKG_VERSION:=1.6.3
-PKG_RELEASE:=5
+PKG_VERSION:=2.1.0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-source.tar.bz2
 PKG_SOURCE_URL:= \
@@ -17,7 +17,7 @@ PKG_SOURCE_URL:= \
 	ftp://ftp.easysw.com/pub/cups/$(PKG_VERSION) \
 	ftp://ftp3.easysw.com/pub/cups/$(PKG_VERSION) \
 	http://www.cups.org/software/$(PKG_VERSION)
-PKG_MD5SUM:=946a2d8ad1aec6beced312fce18543da
+PKG_MD5SUM:=c4e57a66298bfdba66bb3d5bedd317a4
 
 TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
 
@@ -484,7 +484,7 @@ define Package/cups-client/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/bin/{lp,cancel,cupstestppd,cupstestdsc} \
-		$(PKG_INSTALL_DIR)/usr/bin/{ipptool,lpoptions,lpstat,lppasswd} \
+		$(PKG_INSTALL_DIR)/usr/bin/{ipptool,lpoptions,lpstat} \
 		$(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) \
