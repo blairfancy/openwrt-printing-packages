@@ -6,12 +6,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openprinting-cups-filters
-PKG_VERSION:=1.0.37
-PKG_RELEASE:=2
+PKG_VERSION:=1.0.76
+PKG_RELEASE:=3
 
 PKG_SOURCE:=cups-filters-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=http://www.openprinting.org/download/cups-filters/
-PKG_MD5SUM:=210e5cb70e9474b91dd2ab4291a5e48e
+PKG_MD5SUM:=92e14b4f52a320c8d8b8176918bd4a8c
 PKG_BUILD_DIR:=$(BUILD_DIR)/cups-filters-$(PKG_VERSION)
 
 PKG_INSTALL:=1
