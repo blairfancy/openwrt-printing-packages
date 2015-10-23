@@ -1,0 +1,11 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -4686,7 +4686,7 @@ install-dvi-am:
+ install-exec-am: install-binPROGRAMS install-libLTLIBRARIES \
+ 	install-sbinPROGRAMS
+ 	@$(NORMAL_INSTALL)
+-	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
++	#$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
+ install-html: install-html-am
+ 
+ install-html-am:

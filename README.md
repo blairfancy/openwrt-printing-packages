@@ -5,10 +5,12 @@ for OpenWrt.
 
 Notably it has:
 - Ghostscript 9.06
-- Gutenprint 5.2.9
-- Cups 1.6.3
-- OpenPrinting's cups-filters 1.0.37
-- poppler 0.24.1
+- Gutenprint 5.2.10
+- Cups 2.1.0
+- Cups-bjnp 2.0
+- OpenPrinting's cups-filters 1.0.76
+- poppler 0.37.0
+- lcms2 2.7.0
 - many other packages to make sure the ones above work...
 
 [package feed]: http://wiki.openwrt.org/doc/devel/feeds
